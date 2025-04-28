@@ -5,3 +5,5 @@ from django.dispatch import receiver
 #acima são bibliotecas padrões necessárias do Django, e abaixo
 #nossos models
 from .Fabricante import Fabricante
+from .Categoria import Categoria
+from .Produto import Produto
