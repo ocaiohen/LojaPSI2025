@@ -12,7 +12,6 @@ class ProdutoAdmin(admin.ModelAdmin):
     empty_value_display = 'Vazio'
     fields = ('Produto', 'destaque', 'promocao', 'msgPromocao', 'preco', 'categoria',)
     search_fields = ('Produto',)
-    exclude = ('msgPromocao',)
 
 admin.site.register(Fabricante, FabricanteAdmin) #adiciona a interface do admin no browser
 admin.site.register(Categoria)

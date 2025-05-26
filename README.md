@@ -14,6 +14,8 @@ Este repositório é dedicado ao projeto Django em desenvolvimento disciplina de
 `pip install -r requirements.txt`
 6. **Rode as migrations**. Rode o seguinte comando no terminal: 
 `python manage.py migrate loja`
+e depois 
+`python manage.py migrate`
 
 ## Como rodar o projeto?
 
