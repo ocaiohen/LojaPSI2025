@@ -21,6 +21,8 @@ def create_produto_view(request, id=None):
         print(preco)
         print(image)
         try:
+            categoria_id = request.POST.get("CategoriaFk")
+            fabricante_id = request.POST.get("FabricanteFk")
             obj_produto = Produto()
             obj_produto.Produto = produto
             obj_produto.destaque = (destaque is not None)
@@ -32,6 +34,8 @@ def create_produto_view(request, id=None):
                 obj_produto.preco = preco
             obj_produto.criado_em = timezone.now()
             obj_produto.alterado_em = obj_produto.criado_em
+            obj_produto.categoria = Categoria.objects.filter(id=categoria_id).first()
+            obj_produto.fabricante = Fabricante.objects.filter(id=fabricante_id).first()
             # Se for anexado arquivo, salva na pasta e guarda nome no objeto
             if request.FILES is not None:
                 num_files = len(request.FILES.getlist('image'))
@@ -43,11 +47,14 @@ def create_produto_view(request, id=None):
                     if (filename is not None) and (filename != ""):
                         obj_produto.image = filename
             obj_produto.save()
+            print("imagem salva como ", obj_produto.image)
             print("Produto %s salvo com sucesso" % produto)
         except Exception as e:
             print("Erro inserindo produto: %s" % e)
         return redirect("/produto")
-    return render(request, template_name='produto/produto-create.html',status=200)
+    fabricantes = Fabricante.objects.all()
+    categorias = Categoria.objects.all()
+    return render(request, template_name='produto/produto-create.html', context = {"fabricantes": fabricantes, "categorias": categorias}, status=200)
         
         
 
@@ -120,6 +127,7 @@ def edit_produto_postback(request, id=None):
         print(msgPromocao)
         categoria = request.POST.get("CategoriaFk")
         fabricante = request.POST.get("FabricanteFk")
+
         try:
             obj_produto = Produto.objects.filter(id=id).first()
             obj_produto.Produto = produto

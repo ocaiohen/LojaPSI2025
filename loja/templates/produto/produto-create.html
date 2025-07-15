@@ -31,6 +31,22 @@
                 <input name="msgPromocao">
             </div>
             <div class="row mt-2">
+                <label for="CategoriaFk" class="col-md-2">Categoria</label>
+                <select name="CategoriaFk" class="form-control col-md-4">
+                    {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.Categoria }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row mt-2">
+                <label for="FabricanteFk" class="col-md-2">Fabricante</label>
+                <select name="FabricanteFk" class="form-control col-md-4">
+                    {% for fabricante in fabricantes %}
+                        <option value="{{ fabricante.id }}">{{ fabricante.Fabricante }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row mt-2">
                 <label for="preco" class="col-md-2">Preço</label>
                 <input name="preco">
             </div>
