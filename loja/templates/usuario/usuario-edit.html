@@ -17,10 +17,12 @@
                     <div class="form-group col-md-6">
                         {{ f.label }}
                         {{ f }}
+                        {% for error in f.errors %}
+                        <div class="invalid-feedback" style="display: initial;">{{ error }}</div>
+                        {% endif %}
                     </div>
                     {% else %}
                     {{ f }}
-                    {% endif %}
                     {% endfor %}
 
                     {% for f in usuarioForm %}
@@ -28,6 +30,9 @@
                     <div class="form-group col-md-6">
                         {{ f.label }}
                         {{ f }}
+                        {% for error in f.errors %}
+                        <div class="invalid-feedback" style="display: initial;">{{ error }}</div>
+                        {% endfor %}
                     </div>
                     {% else %}
                     {{ f }}
