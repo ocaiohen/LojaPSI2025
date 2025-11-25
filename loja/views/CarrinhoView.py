@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from loja.models import Produto, Carrinho, CarrinhoItem
+from loja.models import Produto, Carrinho, CarrinhoItem, Usuario
 from datetime import datetime
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 
 # Função para adicionar um item ao carrinho
@@ -10,7 +11,12 @@ def create_carrinhoitem_view(request, produto_id=None):
     if produto:
         print('produto: ' + str(produto.id))
     # Tenta pegar o carrinho da sessão ou cria um novo carrinho
-    carrinho_id = request.session.get('carrinho_id')
+    if not request.session.get('carrinho_id'):
+        carrinho = Carrinho.objects.create()
+        request.session['carrinho_id'] = carrinho.id
+
+    carrinho_id = request.session['carrinho_id']
+
     print ('carrinho: ' + str(carrinho_id))
     carrinho = None
     if carrinho_id:
