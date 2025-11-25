@@ -15,8 +15,10 @@ def list_usuario_view(request, id=None):
 
 def edit_usuario_view(request):
     usuario = get_object_or_404(Usuario, user=request.user)
-
     emailUnused = True
+
+    message = None
+
     if request.method == 'POST':
         usuarioForm = UserUsuarioForm(request.POST, instance=usuario)
         userForm = UserForm(request.POST, instance=request.user)
@@ -25,16 +27,33 @@ def edit_usuario_view(request):
         verifyEmail =Usuario.objects.filter(user__email=request.POST['email']).exclude(user__id=request.user.id).first()
 
         emailUnused = verifyEmail is None
-        # VERIFICAR ESTRUTURA ABAIXO
-        if usuarioForm.is_valid() and userForm.is_valid() and emailUnused:
-            usuarioForm.save()
-            userForm.save()
-        else:
-            usuarioForm = UserUsuarioForm(instance=usuario)
-            userForm = UserForm(instance=request.user)
+    else:
+        usuarioForm = UserUsuarioForm(instance=usuario)
+        userForm = UserForm(instance=request.user)
+    
+    # VERIFICAR ESTRUTURA ABAIXO
+    if usuarioForm.is_valid() and userForm.is_valid() and emailUnused:
+        usuarioForm.save()
+        userForm.save()
 
+        message = { 'type': 'success', 'text': 'Dados atualizados com sucesso' }
+    else:
+        # Aqui verificamos se é do tipo post, para que na primeira vez que a página carregar a mensagem não apareça, já que no primeiro carregamento não enviamos um post, o form é dado como inválido e entra aqui.
+        if request.method == 'POST':
+            if emailUnused:
+                # Se o e-mail não está em uso tiver algum dado inválido.
+
+                message = { 'type': 'danger', 'text': 'Dados inválidos' }
+            else:
+                # Se o e-mail já está em uso por outra pessoa.
+                message = { 'type': 'warning', 'text': 'E-mail já usado' }
+        
+    usuarioForm = UserUsuarioForm(instance=usuario)
+    userForm = UserForm(instance=request.user)
     context = {
         'usuarioForm': usuarioForm,
-        'userForm': userForm
+        'userForm': userForm,
+        'message': message
     }
+
     return render(request, template_name='usuario/usuario-edit.html', context=context,status=200)
